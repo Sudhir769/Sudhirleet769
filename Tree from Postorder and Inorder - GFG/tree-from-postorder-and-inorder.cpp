@@ -78,6 +78,7 @@ int findposition(int in[],int inorderstart,int inorderend,int element,int n)
 }
 
 
+
 Node* solve(int in[], int post[],int &index, int is, int ie, int n){
     if( (index < 0) || (is>ie)){
         return NULL;
