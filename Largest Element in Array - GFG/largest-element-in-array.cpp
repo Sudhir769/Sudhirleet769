@@ -12,7 +12,11 @@ class Solution
 public:
     int largest(vector<int> &arr, int n)
     {
-        return *max_element(arr.begin(), arr.end());
+        int largest=arr[0];
+        for(i:arr){
+            largest=max(largest,i);
+        }
+        return largest;
     }
 };
 
