@@ -58,14 +58,17 @@ class Solution
         
         bool value = r1->data == r2-> data;
         
-        if(left && right && value){
-            return true;
-        }else{
-            return false;
-        }
+        return left and right and value;
+        
+        // if(left && right && value){
+        //     return true;
+        // }else{
+        //     return false;
+        // }
         
     }
 };
+
 
 //{ Driver Code Starts.
 
