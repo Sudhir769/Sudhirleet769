@@ -23,8 +23,6 @@ public:
 	            neg.push(arr[i]);
 	        }
 	    }
-	    
-	   
 	    int i=0;
 	    while(i<n){
 	        if(!pos.empty()){
