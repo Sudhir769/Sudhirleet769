@@ -8,28 +8,22 @@ class Solution{
     vector<pair<int,int>> allPairs(int A[], int B[], int n, int M, int X)
     {
         vector<pair<int,int>>ans;
-        sort(B, B+M);
+        unordered_map<int,int>mp;
+        
+        for(int i=0;i<M;i++){
+            mp[B[i]]=i;
+        }
         
         for(int i=0;i<n;i++){
-            
-            int p=X-A[i], flag=0;
-            int low=0, high=M-1, mid;
-            
-            while(low<=high){
-                mid=(low+high)/2;
-                if(B[mid]==p){
-                    flag=1;
-                    break;
-                }
-                if(B[mid]>p)high=mid-1;
-                else low=mid+1;
+            if(mp.find(X-A[i])!=mp.end()){
+                ans.push_back({A[i], X-A[i]});
             }
-            if(flag)ans.push_back({A[i], B[mid]});
         }
         sort(ans.begin(), ans.end());
         return ans;
     }
 };
+
 
 
 //{ Driver Code Starts.
