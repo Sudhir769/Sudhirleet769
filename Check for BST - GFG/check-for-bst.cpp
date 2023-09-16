@@ -22,6 +22,23 @@ struct Node {
 class Solution
 {
     public:
+    bool solve(Node* root, int min, int max){
+        if(root==NULL) return true;
+        
+        if(root->data>min and root->data<max){
+            bool left = solve(root->left, min, root->data);
+            bool right = solve(root->right, root->data, max);
+        
+            return left and right;
+        }
+        return false;
+    }
+    
+    bool isBST(Node* root) 
+    {
+        return solve(root, INT_MIN, INT_MAX);
+    }
+    
     void inorder(Node* root, vector<int>&v){
         if(root){
             inorder(root->left, v);
@@ -30,15 +47,15 @@ class Solution
         }
     }
     //Function to check whether a Binary Tree is BST or not.
-    bool isBST(Node* root) 
-    {
-        vector<int>in;
-        inorder(root, in);
-        for(int i=1;i<in.size();i++){
-            if(in[i-1]>=in[i])return 0;
-        }
-        return 1;
-    }
+    // bool isBST(Node* root) 
+    // {
+    //     vector<int>in;
+    //     inorder(root, in);
+    //     for(int i=1;i<in.size();i++){
+    //         if(in[i-1]>=in[i])return 0;
+    //     }
+    //     return 1;
+    // }
 };
 
 
