@@ -12,7 +12,7 @@ class Solution {
         
         for(auto i:adj[node]){
             if(!vis[i]){
-                vis[i]=1;
+                // vis[i]=1;
                 dfs(i, vis, adj, ans);
             }
         }
