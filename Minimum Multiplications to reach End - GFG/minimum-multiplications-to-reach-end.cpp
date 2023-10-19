@@ -11,33 +11,30 @@ using namespace std;
 class Solution {
   public:
     int minimumMultiplications(vector<int>& arr, int start, int end) {
-        int n = arr.size();
-        const int mod = 1e5;
         
-        vector<int> d(mod, 1e9);
-        queue<int>q;
-        q.push(start);
-        d[start]=0;
+        if(start == end) return 0;
+        queue<pair<int,int>> q;
+        q.push({start, 0});
         
-        if(start==end){
-            return 0;
-        }
+        vector<int>dist(1e5, 1e9);
+        dist[start] = 0;
+        
+        int mod = 100000;
         
         while(!q.empty()){
-            int node = q.front();
+            auto it = q.front();
             q.pop();
             
-            for(auto i:arr){
-                int child = (i*node)%mod;
+            int node = it.first;
+            int steps = it.second;
+            
+            for(auto i: arr){
+                int num = (node*i)%mod;
                 
-                if(d[child] > d[node]+1){
-                    d[child] = d[node] + 1;
-                    
-                    if(child==end){
-                        return d[child];
-                    }
-                    
-                    q.push(child);
+                if(steps + 1 < dist[num]){
+                    dist[num] = steps + 1;
+                    if(num==end) return steps + 1;
+                    q.push({num, steps + 1});
                 }
             }
         }
