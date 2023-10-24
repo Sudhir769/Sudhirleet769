@@ -30,7 +30,7 @@ class Solution
                 int adjNode = x[0];
                 int edgeW = x[1];
                 
-                pq.push({edgeW, adjNode});
+                if(!vis[adjNode]) pq.push({edgeW, adjNode});
             }
         }
         return sum;
