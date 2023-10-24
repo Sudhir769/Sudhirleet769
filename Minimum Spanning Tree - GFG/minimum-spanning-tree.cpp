@@ -3,37 +3,59 @@
 using namespace std;
 
 // } Driver Code Ends
+
+class DisjointSet{
+    public:
+    vector<int>par;
+    
+    DisjointSet(int V){
+        par.resize(V+1);
+        for(int i=0;i<=V;i++){
+            par[i]=i;
+        }
+    }
+    int find(int x){
+        if(x==par[x]) return x;
+        
+        return par[x] = find(par[x]);
+    }
+    
+    void unionSet(int u, int v){
+        par[find(u)] = find(v);
+    }
+};
+
 class Solution
 {
 	public:
 	//Function to find sum of weights of edges of the Minimum Spanning Tree.
     int spanningTree(int V, vector<vector<int>> adj[])
     {
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>pq;
-        pq.push({0,0}); //{wt,node}
-        
-        vector<int>vis(V, 0);
-        int sum=0;
-        
-        while(!pq.empty()){
-            auto it = pq.top();
-            pq.pop();
-            
-            int wt = it.first;
-            int node = it.second;
-            
-            if(vis[node]) continue;
-            vis[node]=1;
-            sum+=wt;
-            
-            for(auto x:adj[node]){
-                int adjNode = x[0];
-                int edgeW = x[1];
+        vector<pair<int,pair<int,int>>>edges;
+        for(int i=0;i<V;i++){
+            for(auto it:adj[i]){
+                int node = i;
+                int adjNode = it[0];
+                int edgeW = it[1];
                 
-                if(!vis[adjNode]) pq.push({edgeW, adjNode});
+                edges.push_back({edgeW,{node, adjNode}});
             }
         }
-        return sum;
+        sort(edges.begin(), edges.end());
+        DisjointSet ds(V);
+        int mstSum=0;
+        
+        for(auto it:edges){
+            int wt = it.first;
+            int u = it.second.first;
+            int v = it.second.second;
+            
+            if(ds.find(u)!=ds.find(v)){
+                mstSum+=wt;
+                ds.unionSet(u,v);
+            }
+        }
+        return mstSum;
     }
 };
 
