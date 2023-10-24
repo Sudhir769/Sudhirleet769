@@ -5,39 +5,43 @@ using namespace std;
 
 // } Driver Code Ends
 //User function Template for C++
-
-class Solution {
-    private:
-    void dfs(int node, vector<int>adj[], int vis[]){
-        vis[node]=1;
-        for(auto i:adj[node]){
-            if(!vis[i]){
-                dfs(i,adj, vis);
-            }
+class DisjointSet{
+    public:
+    vector<int>par;
+    
+    DisjointSet(int V){
+        par.resize(V+1);
+        for(int i=0;i<=V;i++){
+            par[i]=i;
         }
     }
+    int find(int x){
+        if(x==par[x]) return x;
+        
+        return par[x] = find(par[x]);
+    }
+    
+    void unionSet(int u, int v){
+        par[find(u)] = find(v);
+    }
+};
+
+class Solution {
     
     public:
-    int numProvinces(vector<vector<int>> adjls, int V) {
+    int numProvinces(vector<vector<int>> adj, int V) {
         
-        vector<int> adj[V];
+        DisjointSet ds(V);
         
-        for(int i=0;i<V;i++){
+        for(int i=0; i<V;i++){
             for(int j=0;j<V;j++){
-                if(adjls[i][j]==1){
-                    adj[i].push_back(j);
-                    adj[j].push_back(i);
-                }
+                if(adj[i][j]==1) ds.unionSet(i,j);
             }
         }
-    
-        int vis[V]={0};
         int cnt=0;
-        for(int i=0;i<V;i++){
-            if(!vis[i]){
-                cnt++;
-                dfs(i, adj, vis);
-            }
+        
+        for(int i=0; i<V; i++){
+            if(ds.par[i]==i)cnt++;
         }
         return cnt;
     }
