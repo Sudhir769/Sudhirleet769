@@ -8,7 +8,7 @@ class Solution
 {
     public:
     //Function to find the maximum money the thief can get.
-    int dp[100001];
+    vector<int>dp;
     int solve(int arr[], int ind, int n){
         if(ind>=n){
             return 0;
@@ -25,9 +25,22 @@ class Solution
     
     int FindMaxSum(int arr[], int n)
     {
-        memset(dp, -1, sizeof dp);
+        dp.resize(n, -1);
         
-        return solve(arr, 0, n);
+        // return solve(arr, 0, n);
+        
+        int prev1=arr[0];
+        int prev2=0;
+        
+        for(int i=1;i<n;i++){
+            int take = arr[i] + prev2;
+            int not_take = 0 + prev1;
+            
+            int curr = max(take, not_take);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+        return prev1;
     }
 };
 
