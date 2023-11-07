@@ -14,9 +14,8 @@ class Solution
     public:
     string reverseWord(string str)
     {
-        string temp=str;
-        reverse(temp.begin(), temp.end());
-        return temp;
+        reverse(str.begin(), str.end());
+        return str;
     }
 };
 
