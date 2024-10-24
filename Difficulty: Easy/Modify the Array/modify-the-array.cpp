@@ -1,0 +1,62 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+    vector<int> modifyAndRearrangeArray(vector<int> &arr) {
+        vector<int> ans;
+        int n = arr.size();
+        
+        for(int i=0; i<n-1; i++){
+            if(arr[i] != 0 and arr[i] == arr[i+1]){
+                arr[i] = 2 * arr[i];
+                arr[i+1] = 0;
+            }
+        }
+        
+        int j=0;
+        for(int i=0; i<n; i++){ //0 4 0 2 0 12 0 0 0 8
+            if(arr[j] == 0 and arr[i] != 0){ // 4 0 0 4 0 8
+                swap(arr[i], arr[j]);
+                j++;
+            }
+            if(arr[j] != 0) j++;
+        }
+        
+        return arr;
+    }
+};
+
+
+//{ Driver Code Starts.
+
+int main() {
+    string ts;
+    getline(cin, ts);
+    int t = stoi(ts);
+    while (t--) {
+        vector<int> arr;
+        string input;
+        getline(cin, input);
+        stringstream ss(input);
+        int number;
+        while (ss >> number) {
+            arr.push_back(number);
+        }
+        Solution obj;
+        vector<int> ans = obj.modifyAndRearrangeArray(arr);
+        for (int i = 0; i < ans.size(); i++) {
+            cout << ans[i] << " ";
+        }
+        cout << endl;
+        cout << "~" << endl;
+    }
+    return 0;
+}
+
+// } Driver Code Ends
