@@ -1,70 +1,99 @@
 //{ Driver Code Starts
-// Initial template for C++
+// Initial function template for C++
 
 #include <bits/stdc++.h>
 using namespace std;
 
 
 // } Driver Code Ends
-// User function template in C++
-
 class Solution {
   public:
-    // Function to find minimum number of pages.
+    int isPossible(vector<int>& arr, int n, int k, int mid) {
+        int studentCount = 1;
+        int currentSum = 0;
     
-    int solve(int arr[], long long allowedPages, int n){
-        int students = 1;
-        int pages = 0;
-        for(int i=0; i<n; i++){
-            if(pages + arr[i] <= allowedPages){
-                pages += arr[i];
-            }else{
-                students++;
-                pages = arr[i];
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > mid) {
+                return 0; 
+            }
+            if (currentSum + arr[i] > mid) {
+                studentCount++; 
+                currentSum = arr[i];
+                if (studentCount > k) {
+                    return 0; 
+                }
+            } else {
+                currentSum += arr[i];
             }
         }
-        return students;
+        return 1;
     }
     
-    long long findPages(int n, int arr[], int m) {
+    int findPages(vector<int> &arr, int k) {
+        int n = arr.size();
         
-        if(m > n) return -1;
-        
-        long long low = *max_element(arr, arr + n);
-        long long high = accumulate(arr, arr+n, 0);
-        
-        while(low <= high){
-            long long mid = (high + low)/2;
-            
-            int students = solve(arr, mid, n);
-            if(students > m){
-                low = mid+1;
-            }else{
-                high = mid-1;
+        if (n < k) {
+            return -1; 
+        }
+    
+        int sum = 0;
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            sum += arr[i];
+            if (arr[i] > max) {
+                max = arr[i];
             }
         }
-        return low;
+    
+        int low = max;
+        int high = sum;
+        int result = -1;
+    
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (isPossible(arr, n, k, mid)) {
+                result = mid;
+                high = mid - 1; 
+            } else {
+                low = mid + 1;
+            }
+        }
+        return result;
     }
 };
 
 //{ Driver Code Starts.
 
 int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n;
-        cin >> n;
-        int A[n];
-        for (int i = 0; i < n; i++) {
-            cin >> A[i];
+    int test_case;
+    cin >> test_case;
+    cin.ignore();
+    while (test_case--) {
+
+        int d;
+        vector<int> arr, brr, crr;
+        string input;
+        getline(cin, input);
+        stringstream ss(input);
+        int number;
+        while (ss >> number) {
+            arr.push_back(number);
         }
-        int m;
-        cin >> m;
+        getline(cin, input);
+        ss.clear();
+        ss.str(input);
+        while (ss >> number) {
+            crr.push_back(number);
+        }
+        d = crr[0];
+        int n = arr.size();
         Solution ob;
-        cout << ob.findPages(n, A, m) << endl;
+        int ans = ob.findPages(arr, d);
+        cout << ans << endl;
+
+        cout << "~"
+             << "\n";
     }
     return 0;
 }
-
 // } Driver Code Ends
