@@ -1,6 +1,4 @@
 //{ Driver Code Starts
-// Initial template for C++
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -27,8 +25,8 @@ class Solution {
         solve(i, j-1, path + 'L', mat, n);
         
         mat[i][j] = 1;
-        
     }
+    
     vector<string> findPath(vector<vector<int>> &mat) {
         int n = mat.size();
         
@@ -44,25 +42,58 @@ class Solution {
 int main() {
     int t;
     cin >> t;
+    cin.ignore();
     while (t--) {
-        int n;
-        cin >> n;
-        vector<vector<int>> m(n, vector<int>(n, 0));
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                cin >> m[i][j];
+        string input;
+        getline(cin, input);
+        vector<vector<int>> mat;
+        string innerArray;
+        bool isInsideArray = false;
+
+        for (char c : input) {
+            if (c == '[') {
+                if (isInsideArray) {
+                    innerArray.clear();
+                }
+                isInsideArray = true;
+            } else if (c == ']') {
+                if (isInsideArray && !innerArray.empty()) {
+                    vector<int> row;
+                    stringstream ss(innerArray);
+                    int num;
+
+                    while (ss >> num) {
+                        row.push_back(num);
+                        if (ss.peek() == ',')
+                            ss.ignore();
+                        while (isspace(ss.peek()))
+                            ss.ignore();
+                    }
+
+                    mat.push_back(row);
+                    innerArray.clear();
+                }
+                isInsideArray = false;
+            } else if (isInsideArray) {
+                if (!isspace(c)) {
+                    innerArray += c;
+                }
             }
         }
+
         Solution obj;
-        vector<string> result = obj.findPath(m);
+        vector<string> result = obj.findPath(mat);
         sort(result.begin(), result.end());
-        if (result.size() == 0)
-            cout << -1;
+
+        if (result.empty())
+            cout << "[]";
         else
             for (int i = 0; i < result.size(); i++)
                 cout << result[i] << " ";
         cout << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
+
 // } Driver Code Ends
