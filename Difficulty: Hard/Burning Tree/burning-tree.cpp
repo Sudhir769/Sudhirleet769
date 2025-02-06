@@ -1,5 +1,5 @@
 //{ Driver Code Starts
-//Initial Template for C++
+// Initial Template for C++
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -14,7 +14,6 @@ struct Node {
         left = right = NULL;
     }
 };
-
 
 Node *buildTree(string str) {
     // Corner Case
@@ -80,7 +79,7 @@ Node *buildTree(string str) {
 
 
 // } Driver Code Ends
-//User function Template for C++
+// User function Template for C++
 
 /*
 struct Node {
@@ -96,75 +95,62 @@ struct Node {
 */
 class Solution {
   public:
-    unordered_map<Node*, Node*> par;
+    unordered_map<Node*, Node*> parent;
     unordered_map<Node*, bool> vis;
-    Node* tar = NULL;
-    
-    void dfs1(Node* root, int target){
+    int ans = 0;
+    Node* tar;
+    void inorder(Node* root, int target){
         if(root == NULL) return;
-        
-        if(root->data == target){
-            tar = root;
-        }
-        
-        if(root->left != NULL){
-            par[root->left] = root;
-        }
-        if(root->right != NULL){
-            par[root->right] = root;
-        }
-        
-        dfs1(root->left, target);
-        dfs1(root->right, target);
+        if(root->data == target) tar = root;
+
+        if(root->left)  parent[root->left] = root;
+        if(root->right) parent[root->right] = root;
+
+        inorder(root->left, target);
+        inorder(root->right, target);
     }
-    
-    int dfs2(Node* from){
-        if(from == NULL) return 0;
-        
-        int left = 0, right = 0, parent = 0;
-        vis[from] = true;
-        if(vis.find(from->left) == vis.end()){
-            left = dfs2(from->left);
-        }
-        if(vis.find(from->right) == vis.end()){
-            right = dfs2(from->right);
-        }
-        if(par.find(from) != par.end() and vis.find(par[from]) == vis.end()){
-            parent = dfs2(par[from]);
-        }
-        return 1+max({left, right, parent});
+
+    void dfs(Node* root, int k){
+        if(root == NULL or vis[root]) return;
+        vis[root] = true;
+
+        ans = max(ans, k);
+
+        if(root->left) dfs(root->left, k+1);
+        if(root->right) dfs(root->right, k+1);
+        if(parent[root]) dfs(parent[root], k+1);
     }
-    
-    int minTime(Node* root, int target) 
-    {
-        dfs1(root, target);
-        return dfs2(tar) - 1;
+    int minTime(Node* root, int target) {
+        if(root == NULL) return 0;
+        inorder(root, target);
+        
+        dfs(tar, 0);
+        return ans;
     }
 };
 
 //{ Driver Code Starts.
 
-int main() 
-{
+int main() {
     int tc;
     scanf("%d ", &tc);
-    while (tc--) 
-    {    
+    while (tc--) {
         string treeString;
         getline(cin, treeString);
         // cout<<treeString<<"\n";
         int target;
-        cin>>target;
+        cin >> target;
         // cout<<target<<"\n";
 
         Node *root = buildTree(treeString);
         Solution obj;
-        cout<<obj.minTime(root, target)<<"\n"; 
+        cout << obj.minTime(root, target) << "\n";
 
         cin.ignore();
 
+        cout << "~"
+             << "\n";
     }
-
 
     return 0;
 }
