@@ -112,43 +112,39 @@ class Solution {
         return (!node->left and !node->right);
     }
     
-    void dfs(Node* root){
-        if(root == NULL){
-            return;
-        }
+    void left(Node* root){
+        if(root == NULL) return;
+        
+        if(!isLeaf(root)) ans.push_back(root->data);
+        
+        if(root->left) left(root->left);
+        else left(root->right);
+    }
+    
+    void right(Node* root){
+        if(root == NULL) return;
+        
+        if(root->right) right(root->right);
+        else right(root->left);
+        
+        if(!isLeaf(root)) ans.push_back(root->data);
+    }
+    
+    void leaf(Node* root){
+        if(root == NULL) return;
         
         if(isLeaf(root)) ans.push_back(root->data);
-        dfs(root->left);
-        dfs(root->right);
+        leaf(root->left);
+        leaf(root->right);
     }
+    
     vector<int> boundaryTraversal(Node *root) {
-        if(!isLeaf(root))ans.push_back(root->data);
+        if(!isLeaf(root)) ans.push_back(root->data);
         
-        Node* curr = root->left;
-        while(curr){
-            if(isLeaf(curr))break;
-            
-            ans.push_back(curr->data);
-            if(curr->left) curr = curr->left;
-            else curr = curr->right;
-        }
+        left(root->left);
+        leaf(root);
+        right(root->right);
         
-        dfs(root);
-        
-        stack<int> st;
-        curr = root->right;
-        while(curr){
-            if(isLeaf(curr))break;
-            
-            st.push(curr->data);
-            if(curr->right) curr = curr->right;
-            else curr = curr->left;
-        }
-        
-        while(!st.empty()){
-            ans.push_back(st.top());
-            st.pop();
-        }
         return ans;
     }
 };
