@@ -103,37 +103,34 @@ class Solution{
     public:
     /*You are required to complete this method */
     // Return the size of the largest sub-tree which is also a BST
-    bool isBST(Node* head, int low, int high){
-        if(head == NULL){
-            return true;
-        }
-        if(head->data <= low or head->data >= high){
-            return false;
-        }
-        return isBST(head->left, low, head->data) and isBST(head->right, head->data, high);
+    bool isBST(Node* root, int min, int max){
+        if(root == NULL) return true;
+        if(root->data >= max or root->data <= min) return false;
+        
+        return isBST(root->left, min, root->data) and isBST(root->right, root->data, max);
+        
     }
-    
     int getSize(Node* root){
-        if(root == NULL) return 0;
+        if(root == NULL)  return 0;
         
         return 1 + getSize(root->left) + getSize(root->right);
     }
-    
-    int largestBst(Node *root)
+    int largestBst(Node *node)
     {
-    	queue<Node*>q;
-    	int ans = 0;
-    	q.push(root);
+    	queue<Node*> q;
+    	q.push(node);
     	
+    	int ans = 0;
     	while(!q.empty()){
-    	    Node* head = q.front();
+    	    auto root = q.front();
     	    q.pop();
     	    
-    	    if(isBST(head, INT_MIN, INT_MAX)){
-    	        ans = max(ans, getSize(head));
+    	    if(isBST(root, INT_MIN, INT_MAX)){
+    	        ans = max(ans, getSize(root));
     	    }
-    	    if(head->left) q.push(head->left);
-    	    if(head->right) q.push(head->right);
+    	    
+    	    if(root->left) q.push(root->left);
+    	    if(root->right) q.push(root->right);
     	}
     	return ans;
     }
