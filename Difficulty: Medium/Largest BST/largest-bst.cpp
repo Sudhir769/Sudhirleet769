@@ -98,41 +98,35 @@ struct Node {
         left = right = NULL;
     }
 };*/
+struct nodeVal{
+    int minNode, maxNode, size;
+    nodeVal(int min, int max, int size){
+        this->minNode = min;
+        this->maxNode = max;
+        this->size = size;
+    } 
+};
 
 class Solution{
     public:
-    /*You are required to complete this method */
-    // Return the size of the largest sub-tree which is also a BST
-    bool isBST(Node* root, int min, int max){
-        if(root == NULL) return true;
-        if(root->data >= max or root->data <= min) return false;
+    
+    nodeVal solve(Node* root){
+        if(root == NULL){
+            return nodeVal(INT_MAX, INT_MIN, 0);
+        }
+        auto left = solve(root->left);
+        auto right = solve(root->right);
         
-        return isBST(root->left, min, root->data) and isBST(root->right, root->data, max);
+        if(left.maxNode < root->data and right.minNode > root->data){
+            return nodeVal(min(left.minNode, root->data), max(right.maxNode, root->data), left.size + right.size + 1);
+        }
         
+        return nodeVal(INT_MIN, INT_MAX, max(left.size, right.size));
     }
-    int getSize(Node* root){
-        if(root == NULL)  return 0;
-        
-        return 1 + getSize(root->left) + getSize(root->right);
-    }
+    
     int largestBst(Node *node)
     {
-    	queue<Node*> q;
-    	q.push(node);
-    	
-    	int ans = 0;
-    	while(!q.empty()){
-    	    auto root = q.front();
-    	    q.pop();
-    	    
-    	    if(isBST(root, INT_MIN, INT_MAX)){
-    	        ans = max(ans, getSize(root));
-    	    }
-    	    
-    	    if(root->left) q.push(root->left);
-    	    if(root->right) q.push(root->right);
-    	}
-    	return ans;
+    	return solve(node).size;
     }
 };
 
