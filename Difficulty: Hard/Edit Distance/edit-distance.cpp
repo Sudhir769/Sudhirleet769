@@ -1,43 +1,49 @@
 //{ Driver Code Starts
+// Initial Template for C++
 #include <bits/stdc++.h>
 using namespace std;
 
 
 // } Driver Code Ends
+
 class Solution {
   public:
-    int dp[101][101];
-    int solve(int i, int j, string &s1, string &s2){
-        
-        if(i < 0) return j+1;
-        if(j < 0) return i+1;
-        
-        if(dp[i][j] != -1) return dp[i][j];
-        
-        if(s1[i] == s2[j]){
-            return dp[i][j] = 0 + solve(i-1, j-1, s1, s2);
+    vector<vector<int>>dp;
+    int solve(int i, int j, string &s, string &t){
+        if(i<0) return j+1;
+        if(j<0) return i+1;
+        if(dp[i][j] != -1)  return dp[i][j];
+        if(s[i]==t[j]){
+            return dp[i][j] = solve(i-1, j-1, s, t);
         }
-        
-        return dp[i][j] = 1 + min({solve(i-1, j, s1, s2), solve(i, j-1, s1, s2), solve(i-1, j-1, s1, s2)});
+        return dp[i][j] = 1+ min(solve(i-1, j, s, t), min(solve(i, j-1, s, t), solve(i-1, j-1, s, t)));
     }
-    
-    int editDistance(string str1, string str2) {
-        
-        memset(dp, -1, sizeof(dp));
-        return solve(str1.length()-1, str2.length()-1, str1, str2);    
+    int editDistance(string s, string t) {
+        int n = s.size();
+        int m = t.size();
+        dp.resize(n+1, vector<int>(m+1, -1));
+        return solve(n-1, m-1, s, t);
     }
 };
 
+
+
 //{ Driver Code Starts.
+
 int main() {
+
     int T;
     cin >> T;
+    cin.ignore();
     while (T--) {
-        string s, t;
-        cin >> s >> t;
+        string s1;
+        getline(cin, s1);
+        string s2;
+        getline(cin, s2);
         Solution ob;
-        int ans = ob.editDistance(s, t);
+        int ans = ob.editDistance(s1, s2);
         cout << ans << "\n";
+        cout << "~" << endl;
     }
     return 0;
 }
