@@ -8,26 +8,23 @@ using namespace std;
 
 class Solution {
   public:
-    vector<vector<int>> dp;
-    bool solve(int i, vector<int>& arr, int sum){
-        if(i < 0) return sum == 0;
-        if(sum == 0) return true;
-        
-        if(dp[i][sum] != -1) return dp[i][sum];
-        bool take = false;
-        if(sum >= arr[i]){
-            take = solve(i-1, arr, sum - arr[i]);
-        }
-        
-        bool notTake = solve(i-1, arr, sum);
-        
-        return dp[i][sum] = take | notTake;
-    }
+    vector<vector<int>>dp;
     bool isSubsetSum(vector<int>& arr, int sum) {
         int n = arr.size();
+        dp.resize(n+1, vector<int>(sum+1, 0));
+        for(int i=0;i<n;i++) dp[i][0] = 1;
+        if(arr[0] <= sum) dp[0][arr[0]] = 1;
         
-        dp.resize(n, vector<int>(sum+1, -1));
-        return solve(n-1, arr, sum);
+        for(int ind = 1; ind < n; ind++){
+            for(int target = 1; target<=sum; target++){
+                bool notTake = dp[ind-1][target];
+                bool take = false;
+                if(arr[ind]<=target) take = dp[ind-1][target-arr[ind]];
+                dp[ind][target] = take | notTake;
+            }
+        }
+        return dp[n-1][sum];
+        
     }
 };
 
